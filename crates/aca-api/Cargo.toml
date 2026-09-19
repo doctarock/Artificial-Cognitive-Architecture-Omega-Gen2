@@ -1,0 +1,29 @@
+[package]
+name = "aca-api"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[features]
+dev-tools = []
+
+[dependencies]
+aca-types = { workspace = true }
+aca-engine = { workspace = true }
+tokio = { workspace = true, features = ["process"] }
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util", "macros", "rt", "net"] }
+aca-store = { workspace = true }
+aca-util = { workspace = true }
+aca-tiers = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+tokio-tungstenite = "0.24"
+futures-util = "0.3"

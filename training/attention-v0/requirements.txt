@@ -1,0 +1,10 @@
+datasets==5.0.1
+transformers==4.57.2
+trl==0.23.0
+accelerate==1.14.0
+peft==0.20.0
+bitsandbytes==0.50.1
+sentencepiece>=0.2.0
+protobuf>=4.25.0
+unsloth==2025.11.1
+unsloth_zoo==2025.11.2

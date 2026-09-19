@@ -1,0 +1,25 @@
+[package]
+name = "aca-mcp"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+aca-engine = { workspace = true }
+aca-store = { workspace = true }
+aca-tiers = { workspace = true }
+aca-util = { workspace = true }
+tokio = { workspace = true }
+axum = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+schemars = "1"
+rmcp = { version = "3.1.0", features = ["server", "macros", "transport-streamable-http-server", "server-side-http", "tower"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util", "macros", "rt", "net"] }
+tower = { workspace = true }
+wiremock = { workspace = true }

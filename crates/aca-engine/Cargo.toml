@@ -1,0 +1,29 @@
+[package]
+name = "aca-engine"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+aca-types = { workspace = true }
+aca-util = { workspace = true }
+aca-graph = { workspace = true }
+aca-tiers = { workspace = true }
+aca-store = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+rand = { workspace = true }
+async-trait = { workspace = true }
+futures = "0.3"
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util", "macros", "rt"] }
+insta = { workspace = true }
+pretty_assertions = { workspace = true }
+wiremock = { workspace = true }
+reqwest = { workspace = true }

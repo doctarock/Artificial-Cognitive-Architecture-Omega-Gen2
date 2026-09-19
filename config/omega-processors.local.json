@@ -1,0 +1,22 @@
+{
+  "processors": {
+    "executive": {
+      "endpoint": "http://127.0.0.1:9101",
+      "timeout_ms": 1000,
+      "retries": 1,
+      "fallback_processor": null
+    },
+    "attention": {
+      "endpoint": "http://127.0.0.1:9102",
+      "timeout_ms": 500,
+      "retries": 1,
+      "fallback_processor": null
+    },
+    "memory": {
+      "endpoint": "http://127.0.0.1:9103",
+      "timeout_ms": 1000,
+      "retries": 1,
+      "fallback_processor": null
+    }
+  }
+}

@@ -1,0 +1,56 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/aca-types",
+    "crates/aca-util",
+    "crates/aca-graph",
+    "crates/aca-tiers",
+    "crates/aca-store",
+    "crates/aca-engine",
+    "crates/aca-api",
+    "crates/aca-mcp",
+    "crates/omega-acad",
+    "crates/omega-cluster",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace.dependencies]
+aca-types = { path = "crates/aca-types" }
+aca-util = { path = "crates/aca-util" }
+aca-graph = { path = "crates/aca-graph" }
+aca-tiers = { path = "crates/aca-tiers" }
+aca-store = { path = "crates/aca-store" }
+aca-engine = { path = "crates/aca-engine" }
+aca-api = { path = "crates/aca-api" }
+aca-mcp = { path = "crates/aca-mcp" }
+
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+rusqlite = { version = "0.31", features = ["bundled"] }
+rusqlite_migration = "1"
+thiserror = "1"
+anyhow = "1"
+uuid = { version = "1", features = ["v7", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+axum = { version = "0.7", features = ["ws"] }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["trace"] }
+async-trait = "0.1"
+rand = "0.8"
+
+wiremock = "0.6"
+insta = "1"
+pretty_assertions = "1"
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true

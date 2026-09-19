@@ -1,0 +1,36 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum OclOperation {
+    Attend,
+    Maintain,
+    Switch,
+    Suppress,
+    Ignore,
+    Recall,
+    Store,
+    UpdateMemory,
+    Consolidate,
+    Forget,
+    Compare,
+    Infer,
+    Hypothesize,
+    SeekEvidence,
+    UpdateBelief,
+    RetractBelief,
+    FormGoal,
+    PrioritizeGoal,
+    MaintainGoal,
+    DeferGoal,
+    ResumeGoal,
+    DropGoal,
+    Route,
+    Wait,
+    Interrupt,
+    Continue,
+    Plan,
+    Act,
+    Ask,
+    Speak,
+}

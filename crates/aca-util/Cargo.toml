@@ -1,0 +1,9 @@
+[package]
+name = "aca-util"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+uuid = { workspace = true }

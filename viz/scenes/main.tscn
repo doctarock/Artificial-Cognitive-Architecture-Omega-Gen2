@@ -1,0 +1,215 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/architecture_root.gd" id="1_root"]
+[ext_resource type="Script" path="res://scripts/pipeline_view.gd" id="2_pipeline"]
+[ext_resource type="Script" path="res://scripts/working_memory_ring.gd" id="3_wmring"]
+[ext_resource type="Script" path="res://scripts/memory_silos.gd" id="4_silos"]
+[ext_resource type="Script" path="res://scripts/tier_indicator.gd" id="5_tier"]
+[ext_resource type="Script" path="res://scripts/goal_stack_view.gd" id="6_goals"]
+[ext_resource type="Script" path="res://scripts/event_log.gd" id="7_eventlog"]
+[ext_resource type="Script" path="res://scripts/orbit_camera.gd" id="8_orbitcam"]
+[ext_resource type="Script" path="res://scripts/thought_flow.gd" id="9_thoughtflow"]
+[ext_resource type="Script" path="res://scripts/atmosphere.gd" id="10_atmosphere"]
+[ext_resource type="Script" path="res://scripts/cognition_flow.gd" id="11_cognitionflow"]
+[ext_resource type="Script" path="res://scripts/test_status_panel.gd" id="12_teststatus"]
+[ext_resource type="Script" path="res://scripts/knowledge_library_view.gd" id="13_kllibrary"]
+[ext_resource type="Script" path="res://scripts/library_control_panel.gd" id="14_librarypanel"]
+[ext_resource type="Script" path="res://scripts/affect_panel.gd" id="15_affect"]
+[ext_resource type="Script" path="res://scripts/drive_cluster.gd" id="16_drives"]
+[ext_resource type="Script" path="res://scripts/executive_decision_view.gd" id="17_execdecision"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.06, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.18, 0.18, 0.28, 1)
+glow_enabled = true
+glow_intensity = 1.1
+glow_bloom = 0.25
+glow_hdr_threshold = 0.9
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_root")
+
+[node name="Atmosphere" type="Node3D" parent="."]
+script = ExtResource("10_atmosphere")
+
+[node name="PipelineView" type="Node3D" parent="."]
+script = ExtResource("2_pipeline")
+
+[node name="ThoughtFlow" type="Node3D" parent="."]
+script = ExtResource("9_thoughtflow")
+
+[node name="CognitionFlow" type="Node3D" parent="."]
+script = ExtResource("11_cognitionflow")
+
+[node name="WorkingMemoryRing" type="Node3D" parent="."]
+script = ExtResource("3_wmring")
+
+[node name="MemorySilos" type="Node3D" parent="."]
+script = ExtResource("4_silos")
+
+[node name="TierIndicator" type="Node3D" parent="."]
+script = ExtResource("5_tier")
+
+[node name="GoalStackView" type="Node3D" parent="."]
+script = ExtResource("6_goals")
+
+[node name="KnowledgeLibraryView" type="Node3D" parent="."]
+script = ExtResource("13_kllibrary")
+
+[node name="ExecutiveDecisionView" type="Node3D" parent="."]
+script = ExtResource("17_execdecision")
+
+[node name="AffectPanel" type="Node3D" parent="."]
+script = ExtResource("15_affect")
+
+[node name="DriveCluster" type="Node3D" parent="."]
+script = ExtResource("16_drives")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+script = ExtResource("8_orbitcam")
+current = true
+fov = 62.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="EventLogPanel" type="Control" parent="UI"]
+script = ExtResource("7_eventlog")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EventLog" type="RichTextLabel" parent="UI/EventLogPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.58
+anchor_right = 0.5
+anchor_bottom = 0.8
+offset_left = 12.0
+offset_top = 0.0
+offset_right = -6.0
+offset_bottom = 0.0
+bbcode_enabled = true
+scroll_following = true
+selection_enabled = true
+focus_mode = 1
+
+[node name="InputBox" type="TextEdit" parent="UI/EventLogPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.82
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 0.0
+offset_right = -6.0
+offset_bottom = -8.0
+placeholder_text = "Type or paste to Omega, Enter to send (Shift+Enter for a new line)..."
+wrap_mode = 1
+
+[node name="StatusLabel" type="Label" parent="UI/EventLogPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.82
+anchor_top = 0.02
+anchor_right = 1.0
+anchor_bottom = 0.06
+offset_left = 0.0
+offset_right = -12.0
+horizontal_alignment = 2
+text = "connecting..."
+
+[node name="TestStatusPanel" type="Control" parent="UI"]
+script = ExtResource("12_teststatus")
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.3
+anchor_bottom = 0.32
+grow_horizontal = 1
+grow_vertical = 1
+mouse_filter = 2
+
+[node name="RunTestsButton" type="Button" parent="UI/TestStatusPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 140.0
+offset_bottom = 40.0
+text = "Run Tests"
+
+[node name="TestSummaryLabel" type="Label" parent="UI/TestStatusPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 46.0
+offset_right = -12.0
+offset_bottom = 66.0
+text = "Tests: not run yet"
+autowrap_mode = 2
+
+[node name="TestDetailsLabel" type="RichTextLabel" parent="UI/TestStatusPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 72.0
+offset_right = -12.0
+offset_bottom = 280.0
+bbcode_enabled = true
+scroll_active = true
+mouse_filter = 2
+
+[node name="LibraryControlPanel" type="Control" parent="UI"]
+script = ExtResource("14_librarypanel")
+anchor_left = 0.7
+anchor_top = 0.86
+anchor_right = 1.0
+anchor_bottom = 0.98
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="DeliverBookButton" type="Button" parent="UI/LibraryControlPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 168.0
+offset_bottom = 40.0
+text = "Deliver a Book"
+
+[node name="LibraryStatusLabel" type="Label" parent="UI/LibraryControlPanel" unique_name_in_owner="true"]
+unique_name_in_owner = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 46.0
+offset_right = -12.0
+offset_bottom = 66.0
+text = "Library: idle"
+autowrap_mode = 2

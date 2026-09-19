@@ -1,0 +1,40 @@
+[package]
+name = "omega-acad"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[features]
+default = ["dev-tools"]
+# The `/tests/status` dev-loop endpoint (shells out to `cargo test
+# --workspace`) - on by default for local development (matches today's
+# behavior, and the viz app's "run tests" button depends on it), but must
+# be left off (`--no-default-features`) for any binary built to hand to
+# someone who won't have this source tree / cargo on their machine.
+dev-tools = ["aca-api/dev-tools"]
+
+[dependencies]
+aca-types = { workspace = true }
+aca-util = { workspace = true }
+aca-graph = { workspace = true }
+aca-tiers = { workspace = true }
+aca-store = { workspace = true }
+aca-engine = { workspace = true }
+aca-api = { workspace = true }
+aca-mcp = { workspace = true }
+tokio = { workspace = true }
+axum = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = { workspace = true }
+dotenvy = "0.15"
+reqwest = { workspace = true }
+rodio = { version = "0.19", default-features = false, features = ["wav"] }
+pdf-extract = "0.12"
+
+[dev-dependencies]
+tokio-tungstenite = "0.24"
+futures-util = "0.3"

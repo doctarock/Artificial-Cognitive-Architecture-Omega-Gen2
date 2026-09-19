@@ -1,0 +1,501 @@
+[
+  {
+    "repo_id": "ulab-ai/Router-R1-Qwen2.5-3B-Instruct",
+    "repo_type": "model",
+    "local_dir": "models\\research\\ulab-ai\\Router-R1-Qwen2.5-3B-Instruct",
+    "expected_bytes": 13604381262,
+    "local_bytes": 13604381262,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "apache-2.0",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 1570,
+        "local_bytes": 1570,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 31,
+        "local_bytes": 31,
+        "complete": true
+      },
+      {
+        "path": "added_tokens.json",
+        "expected_bytes": 605,
+        "local_bytes": 605,
+        "complete": true
+      },
+      {
+        "path": "config.json",
+        "expected_bytes": 730,
+        "local_bytes": 730,
+        "complete": true
+      },
+      {
+        "path": "generation_config.json",
+        "expected_bytes": 243,
+        "local_bytes": 243,
+        "complete": true
+      },
+      {
+        "path": "merges.txt",
+        "expected_bytes": 1671853,
+        "local_bytes": 1671853,
+        "complete": true
+      },
+      {
+        "path": "model-00001-of-00003.safetensors",
+        "expected_bytes": 4982131536,
+        "local_bytes": 4982131536,
+        "complete": true
+      },
+      {
+        "path": "model-00002-of-00003.safetensors",
+        "expected_bytes": 4932949336,
+        "local_bytes": 4932949336,
+        "complete": true
+      },
+      {
+        "path": "model-00003-of-00003.safetensors",
+        "expected_bytes": 3673383040,
+        "local_bytes": 3673383040,
+        "complete": true
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "expected_bytes": 35640,
+        "local_bytes": 35640,
+        "complete": true
+      },
+      {
+        "path": "special_tokens_map.json",
+        "expected_bytes": 613,
+        "local_bytes": 613,
+        "complete": true
+      },
+      {
+        "path": "tokenizer.json",
+        "expected_bytes": 11421896,
+        "local_bytes": 11421896,
+        "complete": true
+      },
+      {
+        "path": "tokenizer_config.json",
+        "expected_bytes": 7336,
+        "local_bytes": 7336,
+        "complete": true
+      },
+      {
+        "path": "vocab.json",
+        "expected_bytes": 2776833,
+        "local_bytes": 2776833,
+        "complete": true
+      }
+    ]
+  },
+  {
+    "repo_id": "ulab-ai/Router-R1-Qwen2.5-3B-Instruct-Alpha0.9",
+    "repo_type": "model",
+    "local_dir": "models\\research\\ulab-ai\\Router-R1-Qwen2.5-3B-Instruct-Alpha0.9",
+    "expected_bytes": 13604381262,
+    "local_bytes": 13604381262,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "apache-2.0",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 1570,
+        "local_bytes": 1570,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 31,
+        "local_bytes": 31,
+        "complete": true
+      },
+      {
+        "path": "added_tokens.json",
+        "expected_bytes": 605,
+        "local_bytes": 605,
+        "complete": true
+      },
+      {
+        "path": "config.json",
+        "expected_bytes": 730,
+        "local_bytes": 730,
+        "complete": true
+      },
+      {
+        "path": "generation_config.json",
+        "expected_bytes": 243,
+        "local_bytes": 243,
+        "complete": true
+      },
+      {
+        "path": "merges.txt",
+        "expected_bytes": 1671853,
+        "local_bytes": 1671853,
+        "complete": true
+      },
+      {
+        "path": "model-00001-of-00003.safetensors",
+        "expected_bytes": 4982131536,
+        "local_bytes": 4982131536,
+        "complete": true
+      },
+      {
+        "path": "model-00002-of-00003.safetensors",
+        "expected_bytes": 4932949336,
+        "local_bytes": 4932949336,
+        "complete": true
+      },
+      {
+        "path": "model-00003-of-00003.safetensors",
+        "expected_bytes": 3673383040,
+        "local_bytes": 3673383040,
+        "complete": true
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "expected_bytes": 35640,
+        "local_bytes": 35640,
+        "complete": true
+      },
+      {
+        "path": "special_tokens_map.json",
+        "expected_bytes": 613,
+        "local_bytes": 613,
+        "complete": true
+      },
+      {
+        "path": "tokenizer.json",
+        "expected_bytes": 11421896,
+        "local_bytes": 11421896,
+        "complete": true
+      },
+      {
+        "path": "tokenizer_config.json",
+        "expected_bytes": 7336,
+        "local_bytes": 7336,
+        "complete": true
+      },
+      {
+        "path": "vocab.json",
+        "expected_bytes": 2776833,
+        "local_bytes": 2776833,
+        "complete": true
+      }
+    ]
+  },
+  {
+    "repo_id": "ulab-ai/Router-R1-Llama-3.2-3B-Instruct",
+    "repo_type": "model",
+    "local_dir": "models\\research\\ulab-ai\\Router-R1-Llama-3.2-3B-Instruct",
+    "expected_bytes": 14444326890,
+    "local_bytes": 14444326890,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "apache-2.0",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 1570,
+        "local_bytes": 1570,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 31,
+        "local_bytes": 31,
+        "complete": true
+      },
+      {
+        "path": "config.json",
+        "expected_bytes": 919,
+        "local_bytes": 919,
+        "complete": true
+      },
+      {
+        "path": "generation_config.json",
+        "expected_bytes": 184,
+        "local_bytes": 184,
+        "complete": true
+      },
+      {
+        "path": "model-00001-of-00003.safetensors",
+        "expected_bytes": 4998767360,
+        "local_bytes": 4998767360,
+        "complete": true
+      },
+      {
+        "path": "model-00002-of-00003.safetensors",
+        "expected_bytes": 4932808968,
+        "local_bytes": 4932808968,
+        "complete": true
+      },
+      {
+        "path": "model-00003-of-00003.safetensors",
+        "expected_bytes": 4495462048,
+        "local_bytes": 4495462048,
+        "complete": true
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "expected_bytes": 20978,
+        "local_bytes": 20978,
+        "complete": true
+      },
+      {
+        "path": "special_tokens_map.json",
+        "expected_bytes": 325,
+        "local_bytes": 325,
+        "complete": true
+      },
+      {
+        "path": "tokenizer.json",
+        "expected_bytes": 17209920,
+        "local_bytes": 17209920,
+        "complete": true
+      },
+      {
+        "path": "tokenizer_config.json",
+        "expected_bytes": 54587,
+        "local_bytes": 54587,
+        "complete": true
+      }
+    ]
+  },
+  {
+    "repo_id": "ulab-ai/Router-R1-Llama-3.2-3B-Instruct-Alpha0.9",
+    "repo_type": "model",
+    "local_dir": "models\\research\\ulab-ai\\Router-R1-Llama-3.2-3B-Instruct-Alpha0.9",
+    "expected_bytes": 14444326890,
+    "local_bytes": 14444326890,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "apache-2.0",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 1570,
+        "local_bytes": 1570,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 31,
+        "local_bytes": 31,
+        "complete": true
+      },
+      {
+        "path": "config.json",
+        "expected_bytes": 919,
+        "local_bytes": 919,
+        "complete": true
+      },
+      {
+        "path": "generation_config.json",
+        "expected_bytes": 184,
+        "local_bytes": 184,
+        "complete": true
+      },
+      {
+        "path": "model-00001-of-00003.safetensors",
+        "expected_bytes": 4998767360,
+        "local_bytes": 4998767360,
+        "complete": true
+      },
+      {
+        "path": "model-00002-of-00003.safetensors",
+        "expected_bytes": 4932808968,
+        "local_bytes": 4932808968,
+        "complete": true
+      },
+      {
+        "path": "model-00003-of-00003.safetensors",
+        "expected_bytes": 4495462048,
+        "local_bytes": 4495462048,
+        "complete": true
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "expected_bytes": 20978,
+        "local_bytes": 20978,
+        "complete": true
+      },
+      {
+        "path": "special_tokens_map.json",
+        "expected_bytes": 325,
+        "local_bytes": 325,
+        "complete": true
+      },
+      {
+        "path": "tokenizer.json",
+        "expected_bytes": 17209920,
+        "local_bytes": 17209920,
+        "complete": true
+      },
+      {
+        "path": "tokenizer_config.json",
+        "expected_bytes": 54587,
+        "local_bytes": 54587,
+        "complete": true
+      }
+    ]
+  },
+  {
+    "repo_id": "HunterJiang97/PABU-Agent-8B",
+    "repo_type": "model",
+    "local_dir": "models\\research\\HunterJiang97\\PABU-Agent-8B",
+    "expected_bytes": 16077847145,
+    "local_bytes": 16077847145,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "mit",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 1570,
+        "local_bytes": 1570,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 3402,
+        "local_bytes": 3402,
+        "complete": true
+      },
+      {
+        "path": "config.json",
+        "expected_bytes": 840,
+        "local_bytes": 840,
+        "complete": true
+      },
+      {
+        "path": "generation_config.json",
+        "expected_bytes": 180,
+        "local_bytes": 180,
+        "complete": true
+      },
+      {
+        "path": "model-00001-of-00004.safetensors",
+        "expected_bytes": 4976698672,
+        "local_bytes": 4976698672,
+        "complete": true
+      },
+      {
+        "path": "model-00002-of-00004.safetensors",
+        "expected_bytes": 4999802720,
+        "local_bytes": 4999802720,
+        "complete": true
+      },
+      {
+        "path": "model-00003-of-00004.safetensors",
+        "expected_bytes": 4915916176,
+        "local_bytes": 4915916176,
+        "complete": true
+      },
+      {
+        "path": "model-00004-of-00004.safetensors",
+        "expected_bytes": 1168138808,
+        "local_bytes": 1168138808,
+        "complete": true
+      },
+      {
+        "path": "model.safetensors.index.json",
+        "expected_bytes": 23986,
+        "local_bytes": 23986,
+        "complete": true
+      },
+      {
+        "path": "special_tokens_map.json",
+        "expected_bytes": 321,
+        "local_bytes": 321,
+        "complete": true
+      },
+      {
+        "path": "tokenizer.json",
+        "expected_bytes": 17209920,
+        "local_bytes": 17209920,
+        "complete": true
+      },
+      {
+        "path": "tokenizer_config.json",
+        "expected_bytes": 50550,
+        "local_bytes": 50550,
+        "complete": true
+      }
+    ]
+  },
+  {
+    "repo_id": "ulab-ai/Router-R1-Router-Dataset",
+    "repo_type": "dataset",
+    "local_dir": "models\\research\\ulab-ai\\Router-R1-Router-Dataset",
+    "expected_bytes": 10443888,
+    "local_bytes": 10443888,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "apache-2.0",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 2504,
+        "local_bytes": 2504,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 31,
+        "local_bytes": 31,
+        "complete": true
+      },
+      {
+        "path": "router_train_data.json",
+        "expected_bytes": 10441353,
+        "local_bytes": 10441353,
+        "complete": true
+      }
+    ]
+  },
+  {
+    "repo_id": "HunterJiang97/PABU-Data",
+    "repo_type": "dataset",
+    "local_dir": "models\\research\\HunterJiang97\\PABU-Data",
+    "expected_bytes": 35129528,
+    "local_bytes": 35129528,
+    "complete": true,
+    "gated": false,
+    "private": false,
+    "license": "mit",
+    "files": [
+      {
+        "path": ".gitattributes",
+        "expected_bytes": 2504,
+        "local_bytes": 2504,
+        "complete": true
+      },
+      {
+        "path": "README.md",
+        "expected_bytes": 7860,
+        "local_bytes": 7860,
+        "complete": true
+      },
+      {
+        "path": "data/train-00000-of-00001.parquet",
+        "expected_bytes": 35119164,
+        "local_bytes": 35119164,
+        "complete": true
+      }
+    ]
+  }
+]
