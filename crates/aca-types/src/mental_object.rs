@@ -180,6 +180,24 @@ impl PromotionState {
         self.confirmed_at = Some(at);
         self.confirming_references += 1;
     }
+
+    /// The mirror of `confirm()`: walks a `Confirmed` object back to
+    /// `Candidate` - the promotion "cache" invalidating instead of staying
+    /// stale once the live `confidence` it was trusted on has eroded too
+    /// far (see `steps::confidence_revision::apply_contradiction_penalty_and_maybe_demote`,
+    /// the only caller). A no-op if already `Candidate`, symmetric to
+    /// `confirm()`'s own no-op. `confirming_references` is deliberately
+    /// left untouched - a historical count of how many times this content
+    /// has ever earned trust, not a current streak that demotion should
+    /// erase.
+    pub fn demote(&mut self, at: EpochMillis) {
+        if self.status == PromotionStatus::Candidate {
+            return;
+        }
+        self.status = PromotionStatus::Candidate;
+        self.staged_at = at;
+        self.confirmed_at = None;
+    }
 }
 
 impl Default for PromotionState {
@@ -329,5 +347,23 @@ mod tests {
         promotion.confirm(EpochMillis(5_000));
         assert_eq!(promotion.confirmed_at, Some(EpochMillis(0)), "an already-confirmed state must not be re-stamped");
         assert_eq!(promotion.confirming_references, 0, "an already-confirmed state must not double-count");
+    }
+
+    #[test]
+    fn demote_walks_a_confirmed_state_back_to_candidate() {
+        let mut promotion = PromotionState::confirmed(EpochMillis(0));
+        promotion.confirming_references = 2;
+        promotion.demote(EpochMillis(5_000));
+        assert_eq!(promotion.status, PromotionStatus::Candidate);
+        assert_eq!(promotion.staged_at, EpochMillis(5_000));
+        assert_eq!(promotion.confirmed_at, None);
+        assert_eq!(promotion.confirming_references, 2, "confirming_references is historical and must survive a demotion");
+    }
+
+    #[test]
+    fn demote_is_a_no_op_on_an_already_candidate_state() {
+        let mut promotion = PromotionState::candidate(EpochMillis(0));
+        promotion.demote(EpochMillis(5_000));
+        assert_eq!(promotion.staged_at, EpochMillis(0), "an already-candidate state must not be re-staged");
     }
 }

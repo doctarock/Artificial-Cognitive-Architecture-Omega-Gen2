@@ -211,18 +211,36 @@ pub async fn form_memory(
         stored.promotion = PromotionState::candidate(now);
     }
     if is_judgement_gated && config.contradiction_detection_enabled {
-        if let Some(contradicted_id) = detect_contradiction(graph, stored.id, &stored.text, &candidate_embedding, config.contradiction_similarity_band, tier1_pool, self_summary, temperature).await {
-            // `stored` isn't in `graph` yet (inserted just below), so this
-            // Contradicts edge is unconditionally new - no "already
-            // standing edge" check needed the way the goal-outcome
-            // learner's own site needs one. Both sides of a genuine
-            // contradiction lose confidence, symmetrically: conflicting
-            // evidence casts doubt on the established memory *and* on the
-            // brand-new candidate walking in at full trust.
-            aca_graph::reinforce_edge(&mut stored.edges, contradicted_id, aca_types::EdgeKind::Contradicts, now, DEFAULT_HEBBIAN_INCREMENT, DEFAULT_MAX_EDGE_STRENGTH);
-            confidence_revision::apply_contradiction_penalty(&mut stored, confidence_revision_config);
-            if let Some(contradicted) = graph.get_mut(&contradicted_id) {
-                confidence_revision::apply_contradiction_penalty(contradicted, confidence_revision_config);
+        if let Some((matched_id, contradicts)) = detect_contradiction(graph, stored.id, &stored.text, &candidate_embedding, config.contradiction_similarity_band, tier1_pool, self_summary, temperature).await {
+            // `stored` isn't in `graph` yet (inserted just below), so
+            // whichever edge this produces is unconditionally new - no
+            // "already standing edge" check needed the way the goal-
+            // outcome learner's own site needs one.
+            if contradicts {
+                // Both sides lose confidence, symmetrically: conflicting
+                // evidence casts doubt on the established memory *and* on
+                // the brand-new candidate walking in at full trust. Severe,
+                // sustained contradiction can also demote an already-
+                // Confirmed match back to Candidate (see
+                // `apply_contradiction_penalty_and_maybe_demote`'s own doc
+                // comment).
+                aca_graph::reinforce_edge(&mut stored.edges, matched_id, aca_types::EdgeKind::Contradicts, now, DEFAULT_HEBBIAN_INCREMENT, DEFAULT_MAX_EDGE_STRENGTH);
+                confidence_revision::apply_contradiction_penalty_and_maybe_demote(&mut stored, confidence_revision_config, now);
+                if let Some(matched) = graph.get_mut(&matched_id) {
+                    confidence_revision::apply_contradiction_penalty_and_maybe_demote(matched, confidence_revision_config, now);
+                }
+            } else {
+                // A "consistent" vote is real evidence too, just weaker
+                // than the role-matched confirmation scan's own bar
+                // (related, not the same claim) - it raises confidence on
+                // both sides but deliberately does not auto-confirm a
+                // Candidate (see `apply_corroboration_bonus`'s own doc
+                // comment on why this uses the bare, non-confirming form).
+                aca_graph::reinforce_edge(&mut stored.edges, matched_id, aca_types::EdgeKind::Supports, now, DEFAULT_HEBBIAN_INCREMENT, DEFAULT_MAX_EDGE_STRENGTH);
+                confidence_revision::apply_corroboration_bonus(&mut stored, confidence_revision_config);
+                if let Some(matched) = graph.get_mut(&matched_id) {
+                    confidence_revision::apply_corroboration_bonus(matched, confidence_revision_config);
+                }
             }
         }
     }
@@ -243,8 +261,10 @@ pub async fn form_memory(
 /// the band, not just objects sharing the candidate's own role - a new
 /// Semantic belief can just as easily contradict an existing Episodic
 /// memory as another Semantic one. Returns the single closest in-band
-/// match's id once a contradiction is confirmed, or `None` (no in-band
-/// candidate, or the vote didn't confirm a contradiction).
+/// match's id paired with the vote (`true` = contradicts, `false` =
+/// consistent) once a majority actually agrees either way, or `None` (no
+/// in-band candidate, or the votes didn't clear agreement in either
+/// direction).
 async fn detect_contradiction(
     graph: &Graph,
     candidate_id: MentalObjectId,
@@ -254,7 +274,7 @@ async fn detect_contradiction(
     tier1_pool: &DivergentPool,
     self_summary: &str,
     temperature: f32,
-) -> Option<MentalObjectId> {
+) -> Option<(MentalObjectId, bool)> {
     let (low, high) = band;
     let (closest_id, _similarity) = graph
         .iter()
@@ -273,7 +293,14 @@ async fn detect_contradiction(
         return None;
     }
     let contradicts_votes = votes.iter().filter(|&&v| v).count();
-    (contradicts_votes as f32 / votes.len() as f32 >= TIER1_CLASSIFICATION_AGREEMENT_FRACTION).then_some(closest_id)
+    let contradicts_fraction = contradicts_votes as f32 / votes.len() as f32;
+    if contradicts_fraction >= TIER1_CLASSIFICATION_AGREEMENT_FRACTION {
+        Some((closest_id, true))
+    } else if (1.0 - contradicts_fraction) >= TIER1_CLASSIFICATION_AGREEMENT_FRACTION {
+        Some((closest_id, false))
+    } else {
+        None
+    }
 }
 
 /// Same "distinctive whole word, length-guarded against leaked/echoed
@@ -972,10 +999,12 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn an_in_band_candidate_the_vote_calls_consistent_gets_no_edge() {
+    async fn an_in_band_candidate_the_vote_calls_consistent_gets_a_supports_edge_and_a_confidence_boost() {
         let mut graph = Graph::new();
         let mut existing = object_with_embedding("the kitchen light is off", vec![1.0, 0.0, 0.0], EpochMillis(0));
         existing.memory_roles.push(MemoryRole::Semantic);
+        existing.confidence = 0.5;
+        let existing_id = existing.id;
         graph.insert(existing);
 
         let candidate = object_with_embedding("the kitchen light switch was replaced", vec![0.8, 0.6, 0.0], EpochMillis(1_000));
@@ -983,7 +1012,70 @@ mod tests {
         let tier1 = discriminating_pool("consistent");
         form_memory(&mut graph, candidate, &MemoryFormationConfig::default(), &ConfidenceRevisionConfig::default(), &tier1, &empty_tier2(), "", EpochMillis(1_000), 0.3).await;
 
-        assert!(graph.get(&candidate_id).unwrap().edges.is_empty(), "an in-band pair the vote calls consistent must not gain a Contradicts edge");
+        let stored = graph.get(&candidate_id).unwrap();
+        assert_eq!(stored.edges.len(), 1, "an in-band pair the vote calls consistent should gain a Supports edge, not none");
+        assert_eq!(stored.edges[0].target_id, existing_id);
+        assert_eq!(stored.edges[0].kind, aca_types::EdgeKind::Supports);
+
+        let revision = ConfidenceRevisionConfig::default();
+        let existing_confidence = graph.get(&existing_id).unwrap().confidence;
+        assert!((existing_confidence - (0.5 + revision.corroboration_bonus)).abs() < 1e-6, "the established memory should gain confidence from consistent evidence, got {existing_confidence}");
+        // object_with_embedding's default confidence is 0.5 (new_observation's own default).
+        assert!((stored.confidence - (0.5 + revision.corroboration_bonus)).abs() < 1e-6, "the brand-new candidate should also benefit from consistent evidence, got {}", stored.confidence);
+    }
+
+    #[tokio::test]
+    async fn consistent_evidence_does_not_auto_confirm_a_staged_candidate() {
+        let mut graph = Graph::new();
+        let mut existing = object_with_embedding("the kitchen light is off", vec![1.0, 0.0, 0.0], EpochMillis(0));
+        existing.memory_roles.push(MemoryRole::Semantic);
+        existing.promotion = PromotionState::candidate(EpochMillis(0));
+        let existing_id = existing.id;
+        graph.insert(existing);
+
+        let candidate = object_with_embedding("the kitchen light switch was replaced", vec![0.8, 0.6, 0.0], EpochMillis(1_000));
+        let tier1 = discriminating_pool("consistent");
+        form_memory(&mut graph, candidate, &MemoryFormationConfig::default(), &ConfidenceRevisionConfig::default(), &tier1, &empty_tier2(), "", EpochMillis(1_000), 0.3).await;
+
+        assert_eq!(
+            graph.get(&existing_id).unwrap().promotion.status,
+            aca_types::PromotionStatus::Candidate,
+            "a related-but-different-claim corroboration is weaker evidence than the confirmation scan's own bar and must not auto-confirm"
+        );
+    }
+
+    #[tokio::test]
+    async fn sustained_contradiction_demotes_an_existing_confirmed_object() {
+        let mut graph = Graph::new();
+        let mut existing = object_with_embedding("the kitchen light is off", vec![1.0, 0.0, 0.0], EpochMillis(0));
+        existing.memory_roles.push(MemoryRole::Semantic);
+        existing.confidence = 0.5;
+        let existing_id = existing.id;
+        graph.insert(existing);
+
+        let tier1 = discriminating_pool("contradicts");
+
+        // Two different in-band candidates (0.8 and ~0.85 cosine similarity
+        // with `existing`, but only ~0.68 with each other - safely below
+        // the band, so the second formation's own contradiction check
+        // targets `existing` again rather than cross-matching the first
+        // candidate).
+        let candidate_a = object_with_embedding("the kitchen light is on", vec![0.8, 0.6, 0.0], EpochMillis(1_000));
+        form_memory(&mut graph, candidate_a, &MemoryFormationConfig::default(), &ConfidenceRevisionConfig::default(), &tier1, &empty_tier2(), "", EpochMillis(1_000), 0.3).await;
+        assert_eq!(
+            graph.get(&existing_id).unwrap().promotion.status,
+            aca_types::PromotionStatus::Confirmed,
+            "a single contradiction (0.5 -> 0.3 confidence) must not demote outright"
+        );
+
+        let candidate_b = object_with_embedding("the kitchen light switch is broken", vec![0.85, 0.0, 0.527], EpochMillis(2_000));
+        form_memory(&mut graph, candidate_b, &MemoryFormationConfig::default(), &ConfidenceRevisionConfig::default(), &tier1, &empty_tier2(), "", EpochMillis(2_000), 0.3).await;
+
+        assert_eq!(
+            graph.get(&existing_id).unwrap().promotion.status,
+            aca_types::PromotionStatus::Candidate,
+            "sustained contradiction (0.3 -> 0.1 confidence, crossing demotion_confidence_threshold) should invalidate the promotion cache"
+        );
     }
 
     #[tokio::test]

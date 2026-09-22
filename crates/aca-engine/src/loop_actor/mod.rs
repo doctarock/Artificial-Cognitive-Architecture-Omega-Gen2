@@ -1391,14 +1391,22 @@ impl CognitiveLoopActor {
                     let kind = if reward > 0.5 { EdgeKind::Supports } else { EdgeKind::Contradicts };
                     if let Some(source) = self.memory.graph.get_mut(&source_id) {
                         // Checked before reinforcing, not after: only a
-                        // genuinely new Contradicts edge should cost
-                        // confidence - a standing low-reward goal
-                        // relationship merely being re-coactivated on a
-                        // later tick must not crater it repeatedly.
+                        // genuinely new Contradicts/Supports edge should
+                        // move confidence - a standing goal relationship
+                        // merely being re-coactivated on a later tick must
+                        // not crater (or inflate) it repeatedly.
                         let is_new_contradiction = kind == EdgeKind::Contradicts && !source.edges.iter().any(|edge| edge.target_id == goal_id && edge.kind == EdgeKind::Contradicts);
+                        let is_new_support = kind == EdgeKind::Supports && !source.edges.iter().any(|edge| edge.target_id == goal_id && edge.kind == EdgeKind::Supports);
                         reinforce_edge(&mut source.edges, goal_id, kind, now, 0.1, DEFAULT_MAX_EDGE_STRENGTH);
                         if is_new_contradiction {
-                            crate::steps::confidence_revision::apply_contradiction_penalty(source, &self.config.confidence_revision);
+                            crate::steps::confidence_revision::apply_contradiction_penalty_and_maybe_demote(source, &self.config.confidence_revision, now);
+                        } else if is_new_support {
+                            // A verified real-world outcome is at least as
+                            // strong as the role-matched confirmation
+                            // scan's own bar, so - unlike memory_formation's
+                            // weaker textual "consistent" vote - this can
+                            // re-confirm a still-staged Candidate.
+                            crate::steps::confidence_revision::apply_corroboration_bonus_and_maybe_confirm(source, &self.config.confidence_revision, now);
                         }
                         self.memory.dirty_ids.insert(source_id);
                     }

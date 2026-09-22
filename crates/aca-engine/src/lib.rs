@@ -26,7 +26,10 @@ pub use steps::broadcast::{broadcast, decide_admission_deterministic, decide_adm
 pub use steps::coalition::{apply_crowding_normalization, attention_score, form_coalition, CoalitionCandidate};
 pub use steps::communicative_intent::{CommunicativeIntentModelError, CommunicativeIntentPrediction, CommunicativeIntentSpecialist};
 pub use steps::compare::{compare, ComparisonResult, PrecisionTracker, SourceChannel};
-pub use steps::confidence_revision::{apply_contradiction_penalty, ConfidenceRevisionConfig};
+pub use steps::confidence_revision::{
+    apply_contradiction_penalty, apply_contradiction_penalty_and_maybe_demote, apply_corroboration_bonus,
+    apply_corroboration_bonus_and_maybe_confirm, ConfidenceRevisionConfig,
+};
 pub use steps::displacement::{explain_release, verify_displacement, Displacement, ReleaseReason};
 pub use steps::eligibility::{EdgeCredit, EligibilityConfig, EligibilityTraceRegistry};
 pub use steps::executive::{
